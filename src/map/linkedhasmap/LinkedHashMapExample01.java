@@ -16,5 +16,6 @@ public class LinkedHashMapExample01 {
         mainMap.put(null,"d");
         System.out.println(mainMap);
 
+
     }
 }
