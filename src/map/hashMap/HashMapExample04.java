@@ -1,8 +1,6 @@
-package arrayList.hashMap;
+package map.hashMap;
 
-import java.security.Key;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HashMapExample04 {
