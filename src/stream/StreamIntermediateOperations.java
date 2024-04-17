@@ -66,6 +66,20 @@ public class StreamIntermediateOperations {
                 .collect(Collectors.toList());
         System.out.println(evenNumberList);
 
+        //flatMap()
+        List<List<Integer>> nestedList = Arrays.asList(
+                Arrays.asList(1,2,3),
+                Arrays.asList(4,5,6),
+                Arrays.asList(7,8,9)
+        );
+
+        List<Integer> flattenedList = nestedList.stream()
+                .flatMap(List::stream)// Her iç liste için bir Stream oluşturup birleştirme.
+                .collect(Collectors.toList());
+
+        System.out.println(nestedList);
+        System.out.println(flattenedList);
+
 
         //sorted() -> doğal sıralamaya göre sıralar(alfabetik).Comparable interface'inden implement edilen
         //öğeleri barındırdığı sürece efektif bir şekilde çalışır.

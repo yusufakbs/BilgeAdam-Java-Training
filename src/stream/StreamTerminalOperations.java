@@ -2,6 +2,8 @@ package stream;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
@@ -92,6 +94,61 @@ public class StreamTerminalOperations {
         });
 
         System.out.println(list01);
+
+        //reduce -> Akıştaki öğeler üzerinde bir işlem uygulayarak tek bir sonuç üretmek için kullanılır.
+
+        Stream<Integer> stream = Stream.of(8,7,6);
+        Stream<Integer> stream1 = Stream.of(8,7,6);
+
+        System.out.println("Reduce :" + stream.reduce(10,(a,b) -> a * b));
+
+        //Identity'si olmayan method Optional
+        System.out.println("Reduce :" + stream1.reduce((a,b) -> a * b));
+
+        Stream<String> streamTest = Stream.of("w1","o2","n3","a4","x5");
+
+        String word = streamTest.reduce("X", String::concat);
+        System.out.println(word);
+
+        Stream<String> streamTest01 = Stream.of("w","o","l","f");
+        String word2 = String.valueOf(streamTest01.reduce((c,d) -> c+"--"+d));
+        System.out.println(word2);
+
+
+        //collect()
+        String frenchCounting = "un:deux:trois:quatre:un";
+        List<String> gmailList = Arrays.stream(Pattern.compile(":")
+                .split(frenchCounting)).collect(Collectors.toList());
+        System.out.println(gmailList);
+        List<String> gmailList2 = List.of(frenchCounting.split(":"));
+        System.out.println(gmailList2);
+
+        //collect(Collectors.toList())
+        Set<String> gmailSet = Pattern.compile(":")
+                .splitAsStream(frenchCounting).collect(Collectors.toSet());
+        System.out.println(gmailSet);
+
+
+        //collect(Collectors.toMap())
+        Map<String,Integer> nameLenght = Stream.of("Albus", "Percival", "Wulfric", "Brian", "Dumbledore")
+                .collect(Collectors.toMap(name -> name,String::length));
+
+        System.out.println(nameLenght);
+
+        //StringBuilder();
+
+        Stream<String> stream05 = Stream.of("w","o","l","f");
+        StringBuilder word3 = stream05.collect(StringBuilder::new,StringBuilder::append,StringBuilder::append);
+        System.out.println(word3);
+
+        Stream<String> stream06 = Stream.of("w","o","l","f");
+        TreeSet<String> treeSet = stream06.collect(Collectors.toCollection(TreeSet::new));
+        System.out.println(treeSet);
+
+
+
+
+
 
 
     }
