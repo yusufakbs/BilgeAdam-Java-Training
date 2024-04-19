@@ -1,0 +1,82 @@
+//Ekleme
+ALTER TABLE cars ADD color VARCHAR(255)
+//Silme
+ALTER TABLE cars DROP color;
+
+//Adını değiştirme
+ALTERTABLE cars RENAME COLUMN color TO colorrrr;
+
+//Veri boyutunu, türünü değiştirme
+ALTER TABLE cars ALTER COLUMN color TYPE VARCHAR(150)
+
+// Çoklu veri güncelleme
+UPDATE cars
+SET color = 'white' , year =200
+WHERE brand = 'Ford'; // OR brand = 'Toyota';
+
+--Tablodan kayıt silme
+DELETE from cars
+WHERE brand = 'Ford';
+
+//Tabloyu silmek için;
+DROP TABLE cars;
+
+CREATE TABLE students(
+
+name VARCHAR(250)
+surname VARCHAR(250)
+grade VARCHAR(250)
+
+)
+
+--% işareti sıfır, bir veya birden fazla karakteri temsil eden bir wildcard'dır.
+SELECT * FROM cars
+WHERE model LIKE 'R%'; --% Modeli 'R' ile başlayan verilerin hepsini getirir.
+
+
+SELECT * FROM cars
+WHERE model LIKE '%r'; --% Modeli 'r' ile biten verileri getirir.
+
+SELECT * FROM cars
+WHERE model LIKE '%r%'; --% Modelin içinde 'r' harfi geçen verileri getirir.
+
+SELECT * FROM cars
+WHERE model LIKE '%ra%'; --% Modelin içinde 'ra' harfi geçen verileri getirir.
+
+SELECT * FROM cars
+WHERE brand LIKE '___ra___' --  her bir '_' veri setinde yer alan verilerin her bir harfini indexli olarak temsil eder. örn; (Ferrari -> 'F_rr_ri')
+
+--Birden fazla koşulu kontrol etmek isteğimizde AND operatörü kullanılır.
+SELECT * FROM cars
+WHERE brand = 'Nissan'
+AND brand = 'Ford';
+
+SELECT * FROM cars
+WHERE brand IN ('Nissan',('Aston Martin'),'Ford'; -- IN bize OR işlevselliğini sağlar.
+
+SELECT * FROM cars
+WHERE year BETWEEN 1960 AND 1940; --Veri setinden belli bir aralığı almamıza olanak sağlar.
+
+SELECT * FROM cars
+WHERE model IS NULL; -- Null olan değerleri almamıza olanak sağlar.
+
+
+SELECT * FROM cars
+WHERE brand NOT LIKE 'f%'; -- Girilen karakter(büyük küçük harf duyarlı) ile başlamayan verilerin geri dönüşüne olanak sağlar.
+
+SELECT * FROM cars
+WHERE brand NOT ILIKE 'f%'; -- Girilen karakter(büyük küçük harf duyarsız) ile başlamayan verilerin geri dönüşüne olanak sağlar.
+
+SELECT * FROM cars
+WHERE brand NOT IN ('Cobra','Ford','Ferrari'); -- Veri setinde olmadığı bütün kayıtları döndürür.
+
+SELECT * FROM cars
+WHERE year NOT BETWEEN 1950 AND 2000; -- Aralık dışında olana bütün kayıtları getirir.
+
+
+SELECT * FROM cars
+WHERE model IS NOT null; -- Null olmayan bütün değerleri döndürür.
+
+
+
+
