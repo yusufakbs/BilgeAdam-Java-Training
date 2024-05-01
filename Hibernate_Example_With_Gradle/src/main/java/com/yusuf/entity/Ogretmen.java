@@ -21,10 +21,11 @@ public class Ogretmen extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Embedded
     private KisiselBilgiler kisiselBilgiler;
+    @Enumerated(EnumType.ORDINAL)
     private EBrans brans;
+    @Column(name = "ise_baslama_tarihi")
     private Long iseGirisTarihi;
-    private List<Long> sinifIdList;
+
 }

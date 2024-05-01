@@ -10,19 +10,17 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tbl_ogrenci")
-public class Ogrenci extends BaseEntity{
+public class Ogrenci extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Embedded
     private KisiselBilgiler kisiselBilgiler;
-
     private Long dogumTarihi;
     private Long sinifId;
 }

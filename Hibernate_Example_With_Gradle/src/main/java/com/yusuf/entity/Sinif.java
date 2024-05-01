@@ -13,9 +13,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "tbl_sifin")
 public class Sinif extends BaseEntity{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "sinif_Adi")
     private String sinifAdi;
-
 }

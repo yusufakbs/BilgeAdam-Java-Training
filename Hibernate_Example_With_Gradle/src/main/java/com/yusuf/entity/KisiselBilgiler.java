@@ -13,9 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Embeddable
 public class KisiselBilgiler {
-
     private String isim;
     private String soyisim;
-    @Column(length = 11)
+    @Column(length = 11, name = "tc_kimlik_no")
     private String tcKimlik;
 }
