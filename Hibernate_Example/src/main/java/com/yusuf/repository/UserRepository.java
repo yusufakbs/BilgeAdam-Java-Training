@@ -1,22 +1,31 @@
 package com.yusuf.repository;
 
+import com.yusuf.entity.Interest;
 import com.yusuf.entity.User;
 import com.yusuf.utility.HibernateUtility;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Optional;
 
 public class UserRepository extends MyFactoryRepository<User,Long> {
-    public UserRepository() {
+    private EntityManager entityManager;
+
+    public UserRepository() { // Constructor based Dependency Injection
         super(new User());
+        this.entityManager = HibernateUtility.getSessionFactory().createEntityManager();
+    }
+
+    //Native Query
+    public List<Interest> findUsersInterests(User user){
+        String sql = "SELECT i.*\n" +
+                "FROM tbl_interest i\n" +
+                "JOIN tbl_user u ON i.userid = u.id\n" +
+                "WHERE u.id = :userId";
+        TypedQuery<Interest> interestTypedQuery = (TypedQuery<Interest>) entityManager.createNativeQuery(sql, Interest.class);
+        interestTypedQuery.setParameter("userId",user.getId());
+        return interestTypedQuery.getResultList();
     }
 }
+
+
+//

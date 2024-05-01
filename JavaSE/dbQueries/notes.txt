@@ -78,5 +78,23 @@ SELECT * FROM cars
 WHERE model IS NOT null; -- Null olmayan bütün değerleri döndürür.
 
 
+Primary key : Her tabloda birincil anahtar belirtilir ve bu anahtarla bir kayda erişilir.
+Secondary key: İhtiyaç durumuna göre belirli sorgulamaları hızlandırmak veya verileri daha iyi anlamak için ikincil anahtarlar eklenir.
+Bağımlılık azaltma: Veriler arasındaki
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
