@@ -16,22 +16,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RepositoryManager<T extends BaseEntity,ID> implements ICrud<T,ID>{
+public class RepositoryManager<T extends BaseEntity, ID> implements ICrud<T, ID> {
     private final EntityManagerFactory emf;
     private EntityManager em;
     private final T t;
-    public RepositoryManager(T t){
+
+    public RepositoryManager(T t) {
         emf = Persistence.createEntityManagerFactory("CRM");
         em = emf.createEntityManager();
         this.t = t;
     }
 
-    private void openSession(){
+    private void openSession() {
         em = emf.createEntityManager();
         em.getTransaction().begin();
     }
 
-    private void closeSession(){
+    private void closeSession() {
         em.getTransaction().commit();
         em.close();
 
@@ -39,47 +40,47 @@ public class RepositoryManager<T extends BaseEntity,ID> implements ICrud<T,ID>{
 
     @Override
     public T save(T entity) {
-        try{
+        try {
             openSession();
-         entity.setCreatedAt(System.currentTimeMillis());
-         entity.setUpdateAt(System.currentTimeMillis());
-         entity.setState(1);
+            entity.setCreatedAt(System.currentTimeMillis());
+            entity.setUpdateAt(System.currentTimeMillis());
+            entity.setState(1);
             em.persist(entity); //transient state -> persistent state
             closeSession();
-        }catch (Exception exception){
+        } catch (Exception exception) {
             if (em.isOpen())
                 closeSession();
         }
-        return  entity;
+        return entity;
     }
 
     @Override
     public T update(T entity) {
-        try{
+        try {
             openSession();
             entity.setUpdateAt(System.currentTimeMillis());
             em.merge(entity);
             closeSession();
-        }catch (Exception exception){
+        } catch (Exception exception) {
             if (em.isOpen())
                 closeSession();
         }
-        return  entity;
+        return entity;
     }
 
     @Override
     public Iterable<T> saveAll(Iterable<T> entities) {
-        try{
+        try {
             openSession();
-            entities.forEach(entity->{
+            entities.forEach(entity -> {
                 em.persist(entity);
             });
             closeSession();
-        }catch (Exception exception){
+        } catch (Exception exception) {
             if (em.isOpen())
                 closeSession();
         }
-        return  entities;
+        return entities;
     }
 
     @Override
@@ -88,12 +89,12 @@ public class RepositoryManager<T extends BaseEntity,ID> implements ICrud<T,ID>{
         CriteriaQuery<T> criteriaQuery = (CriteriaQuery<T>) criteriaBuilder.createQuery(t.getClass()); // select * from tblsecmen where id=? ->
         Root<T> root = (Root<T>) criteriaQuery.from(t.getClass());
         criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.equal(root.get("id"),id));
+        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), id));
         T t1;
-        try{
-            t1 =  em.createQuery(criteriaQuery).getSingleResult();
+        try {
+            t1 = em.createQuery(criteriaQuery).getSingleResult();
             return Optional.of(t1);
-        }catch (NoResultException exception){
+        } catch (NoResultException exception) {
             return Optional.empty();
         }
     }
@@ -104,22 +105,25 @@ public class RepositoryManager<T extends BaseEntity,ID> implements ICrud<T,ID>{
         CriteriaQuery<T> criteriaQuery = (CriteriaQuery<T>) criteriaBuilder.createQuery(t.getClass()); // select * from tblsecmen where id=? ->
         Root<T> root = (Root<T>) criteriaQuery.from(t.getClass());
         criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.equal(root.get("id"),id));
-        try{
+        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), id));
+        try {
             em.createQuery(criteriaQuery).getSingleResult();
             return true;
-        }catch (NoResultException exception){
+        } catch (NoResultException exception) {
             return false;
         }
     }
 
     @Override
     public List<T> findAll() {
+        openSession();
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = (CriteriaQuery<T>) criteriaBuilder.createQuery(t.getClass()); // select * from tblsecmen where id=? ->
         Root<T> root = (Root<T>) criteriaQuery.from(t.getClass());
         criteriaQuery.select(root);
-        return em.createQuery(criteriaQuery).getResultList();
+        List<T> list = em.createQuery(criteriaQuery).getResultList();
+        closeSession();
+        return list;
     }
 
     @Override
@@ -128,7 +132,7 @@ public class RepositoryManager<T extends BaseEntity,ID> implements ICrud<T,ID>{
         CriteriaQuery<T> criteriaQuery = (CriteriaQuery<T>) criteriaBuilder.createQuery(t.getClass()); // select * from tblsecmen where id=? ->
         Root<T> root = (Root<T>) criteriaQuery.from(t.getClass());
         criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.equal(root.get(columnName),value));
+        criteriaQuery.where(criteriaBuilder.equal(root.get(columnName), value));
         return em.createQuery(criteriaQuery).getResultList();
     }
 
@@ -138,18 +142,18 @@ public class RepositoryManager<T extends BaseEntity,ID> implements ICrud<T,ID>{
         CriteriaQuery<T> criteriaQuery = (CriteriaQuery<T>) criteriaBuilder.createQuery(t.getClass()); // select * from tblsecmen where id=? ->
         Root<T> root = (Root<T>) criteriaQuery.from(t.getClass());
         criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.equal(root.get("id"),id));
+        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), id));
         T removeElement;
-        try{
-            removeElement =  em.createQuery(criteriaQuery).getSingleResult();
-        }catch (NoResultException exception){
+        try {
+            removeElement = em.createQuery(criteriaQuery).getSingleResult();
+        } catch (NoResultException exception) {
             removeElement = null;
         }
         try {
             openSession();
             em.remove(removeElement);
             closeSession();
-        }catch (Exception e){
+        } catch (Exception e) {
             if (em.isOpen())
                 closeSession();
         }
@@ -165,19 +169,19 @@ public class RepositoryManager<T extends BaseEntity,ID> implements ICrud<T,ID>{
         Root<T> root = (Root<T>) criteriaQuery.from(t.getClass());
         criteriaQuery.select(root);
         List<Predicate> predicateList = new ArrayList<>();
-        for(int i=1;i<fields.length;i++){
+        for (int i = 1; i < fields.length; i++) {
             fields[i].setAccessible(true);
-            try{
+            try {
                 Object value = fields[i].get(entity);
                 String column = fields[i].getName();
-                if(value != null)
-                    if(value instanceof String){
-                        predicateList.add(criteriaBuilder.like(root.get(column),"%"+value+"%"));
-                    }else {
-                        predicateList.add(criteriaBuilder.equal(root.get(column),value));
+                if (value != null)
+                    if (value instanceof String) {
+                        predicateList.add(criteriaBuilder.like(root.get(column), "%" + value + "%"));
+                    } else {
+                        predicateList.add(criteriaBuilder.equal(root.get(column), value));
                     }
-            }catch (Exception exception){
-                System.out.println("Hata oluştu....: "+ exception);
+            } catch (Exception exception) {
+                System.out.println("Hata oluştu....: " + exception);
             }
 
         }
