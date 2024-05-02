@@ -17,7 +17,6 @@ public class DateUtils {
             LocalDate localDate = LocalDate.ofEpochDay(dateAsLong / 86400);
             return localDate.format(formatter);
         }
-
 }
 
 
